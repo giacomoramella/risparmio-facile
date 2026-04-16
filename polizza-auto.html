@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Polizza Auto – RisparmioFacile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ── BAR CHART ── */
+  .chart-section { background: var(--bg-alt); }
+  .bar-chart { max-width: 720px; margin: 3rem auto 0; }
+  .bar-row {
+    display: flex; align-items: center; gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .bar-company { width: 130px; font-size: .875rem; font-weight: 500; color: var(--text); text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; background: var(--border); border-radius: 50px; height: 36px; overflow: hidden; position: relative; }
+  .bar-fill {
+    height: 100%; border-radius: 50px;
+    background: rgba(26,60,46,.12);
+    display: flex; align-items: center; padding: 0 1rem;
+    transition: width 1.2s cubic-bezier(.22,.68,0,1.2);
+    position: relative;
+  }
+  .bar-fill.best { background: linear-gradient(90deg, var(--green-dark), var(--green)); }
+  .bar-price { font-family: 'Syne', sans-serif; font-size: .875rem; font-weight: 700; color: var(--text); white-space: nowrap; }
+  .bar-fill.best .bar-price { color: var(--primary); }
+  .bar-best-label {
+    margin-left: .75rem; background: var(--primary); color: #fff;
+    font-size: .68rem; font-weight: 700; padding: .2rem .6rem; border-radius: 50px; white-space: nowrap;
+  }
+  .chart-note { text-align: center; color: var(--text-muted); font-size: .8rem; margin-top: 1.5rem; }
+
+  /* ── COVERAGES ── */
+  .coverage-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(240px,1fr));
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .coverage-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow-sm);
+    transition: transform .3s cubic-bezier(.22,.68,0,1.2), box-shadow .3s;
+  }
+  .coverage-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-lg); border-color: var(--border-green); }
+  .cov-icon { font-size: 2rem; margin-bottom: 1rem; display: block; }
+  .cov-badge {
+    display: inline-block; font-size: .68rem; font-weight: 600; letter-spacing: .04em;
+    padding: .2rem .6rem; border-radius: 50px; margin-bottom: .75rem;
+  }
+  .cov-required { background: rgba(26,60,46,.1); color: var(--primary); }
+  .cov-optional { background: rgba(61,214,140,.12); color: #1a7a4a; }
+  .coverage-card h3 { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 600; margin-bottom: .4rem; color: var(--text); }
+  .coverage-card p { font-size: .85rem; color: var(--text-muted); line-height: 1.65; }
+
+  /* ── QUOTE FORM ── */
+  .form-section { background: var(--bg); }
+  .quote-box {
+    max-width: 620px; margin: 3rem auto 0;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 2.5rem;
+    box-shadow: var(--shadow-md);
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-row.single { grid-template-columns: 1fr; }
+  .form-group { display: flex; flex-direction: column; gap: .4rem; }
+  .form-group label { font-size: .8rem; font-weight: 600; color: var(--text); letter-spacing: .03em; }
+  .form-group input, .form-group select {
+    padding: .75rem 1rem; border-radius: 12px;
+    border: 1px solid var(--border); background: var(--bg);
+    font-family: 'DM Sans', sans-serif; font-size: .95rem; color: var(--text);
+    transition: border-color .2s, box-shadow .2s; outline: none;
+  }
+  .form-group input:focus, .form-group select:focus {
+    border-color: var(--border-green); box-shadow: 0 0 0 3px rgba(61,214,140,.1);
+  }
+  .form-submit { width: 100%; margin-top: 1.5rem; font-size: 1.05rem; padding: 1rem; border-radius: 14px; }
+  .form-note { text-align: center; font-size: .78rem; color: var(--text-muted); margin-top: 1rem; }
+
+  /* ── BENEFITS ── */
+  .benefits-section { background: var(--bg-alt); }
+  .benefits-row {
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 2rem; margin-top: 3rem;
+  }
+  .benefit-item { text-align: center; }
+  .benefit-num {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.2rem,5vw,3.5rem); font-weight: 700;
+    color: var(--primary); display: block; line-height: 1;
+  }
+  .benefit-label { font-size: .9rem; color: var(--text-muted); margin-top: .5rem; line-height: 1.5; display: block; }
+
+  @media(max-width:600px){
+    .form-row { grid-template-columns:1fr; }
+    .benefits-row { grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="index.html">Risparmio<span>Facile</span></a>
+  <ul>
+    <li><a href="polizza-auto.html" class="active">Polizza Auto</a></li>
+    <li><a href="polizza-casa.html">Polizza Casa</a></li>
+    <li><a href="piano-pensione.html">Piano Pensione</a></li>
+    <li><a href="index.html#faq">FAQ</a></li>
+    <li><a href="#preventivo" class="nav-cta">Preventivo gratis →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
+
+  <div class="hero-eyebrow"><span class="dot"></span>RC Auto obbligatoria · Furto, Incendio & Kasko</div>
+
+  <h1>RC Auto al<br><span class="hero-accent">miglior prezzo.</span><br>In 3 minuti.</h1>
+
+  <p class="hero-sub">Confrontiamo oltre 50 compagnie assicurative in tempo reale. Il risparmio medio dei nostri clienti è di €261 all'anno.</p>
+
+  <div class="hero-actions">
+    <a href="#preventivo" class="btn-primary">Calcola il tuo preventivo →</a>
+    <a href="#coperture" class="btn-secondary">Scopri le coperture</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="hstat">
+      <span class="hstat-num" data-target="35" data-suffix="%">0</span>
+      <span class="hstat-label">Risparmio medio<br>rispetto al mercato</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num" data-target="50" data-suffix="+">0</span>
+      <span class="hstat-label">Compagnie<br>confrontate</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num" data-target="3">0</span>
+      <span class="hstat-label">Minuti per il<br>preventivo completo</span>
+    </div>
+    <div class="hstat">
+      <span class="hstat-num" data-prefix="€" data-target="261">0</span>
+      <span class="hstat-label">Risparmio medio<br>annuo garantito</span>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="tb-item"><div class="tb-icon">🏛️</div><div><span class="tb-label">IVASS Registrato</span><span class="tb-sub">Intermediario autorizzato</span></div></div>
+  <div class="tb-item"><div class="tb-icon">⚡</div><div><span class="tb-label">Preventivo istantaneo</span><span class="tb-sub">Zero documenti richiesti</span></div></div>
+  <div class="tb-item"><div class="tb-icon">🔒</div><div><span class="tb-label">Pagamento sicuro</span><span class="tb-sub">Carta, bonifico o rata</span></div></div>
+  <div class="tb-item"><div class="tb-icon">📧</div><div><span class="tb-label">Polizza via email</span><span class="tb-sub">Documenti digitali immediati</span></div></div>
+</div>
+
+<!-- BAR CHART -->
+<section class="chart-section">
+  <div class="centered">
+    <span class="section-label">Confronto prezzi</span>
+    <h2 class="section-title">Quanto pagano gli italiani<br>per la RC Auto</h2>
+    <p class="section-sub">Confronto prezzi medi per profilo standard: guidatore 35 anni, auto berlina, Milano. Dati aggiornati 2026.</p>
+  </div>
+
+  <div class="bar-chart">
+    <div class="bar-row reveal">
+      <div class="bar-company">Generali</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-width="100%"><span class="bar-price">€650</span></div></div>
+    </div>
+    <div class="bar-row reveal">
+      <div class="bar-company">UnipolSai</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-width="89.2%"><span class="bar-price">€580</span></div></div>
+    </div>
+    <div class="bar-row reveal">
+      <div class="bar-company">Allianz</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-width="80%"><span class="bar-price">€520</span></div></div>
+    </div>
+    <div class="bar-row reveal">
+      <div class="bar-company">AXA</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-width="75.4%"><span class="bar-price">€490</span></div></div>
+    </div>
+    <div class="bar-row reveal">
+      <div class="bar-company">Zurich</div>
+      <div class="bar-track"><div class="bar-fill" style="width:0" data-width="72.3%"><span class="bar-price">€470</span></div></div>
+    </div>
+    <div class="bar-row reveal">
+      <div class="bar-company">Nostra selezione</div>
+      <div class="bar-track"><div class="bar-fill best" style="width:0" data-width="59.8%"><span class="bar-price">€389</span><span class="bar-best-label">Miglior prezzo</span></div></div>
+    </div>
+  </div>
+  <p class="chart-note">* Prezzi indicativi per profilo standard. Il tuo preventivo personalizzato potrebbe essere ancora più basso.</p>
+</section>
+
+<!-- COVERAGES -->
+<section id="coperture" style="background:var(--bg)">
+  <div class="centered">
+    <span class="section-label">Le coperture</span>
+    <h2 class="section-title">Cosa copre la tua polizza auto</h2>
+    <p class="section-sub">Dalla RC obbligatoria alle garanzie accessorie: scegli il livello di protezione adatto a te.</p>
+  </div>
+  <div class="coverage-grid">
+    <div class="coverage-card reveal">
+      <span class="cov-icon">🚗</span>
+      <span class="cov-badge cov-required">Obbligatoria</span>
+      <h3>Responsabilità Civile (RCA)</h3>
+      <p>Copre i danni causati a persone e cose di terzi in caso di incidente. È obbligatoria per legge per tutti i veicoli a motore.</p>
+    </div>
+    <div class="coverage-card reveal">
+      <span class="cov-icon">🔥</span>
+      <span class="cov-badge cov-optional">Opzionale</span>
+      <h3>Furto & Incendio</h3>
+      <p>Rimborso del valore commerciale del veicolo in caso di furto totale o parziale, e danni da incendio o scoppio.</p>
+    </div>
+    <div class="coverage-card reveal">
+      <span class="cov-icon">💥</span>
+      <span class="cov-badge cov-optional">Opzionale</span>
+      <h3>Kasko Completa</h3>
+      <p>Copre i danni al tuo veicolo indipendentemente dalla colpa: urti, grandine, atti vandalici e incidenti con animali.</p>
+    </div>
+    <div class="coverage-card reveal">
+      <span class="cov-icon">🛟</span>
+      <span class="cov-badge cov-optional">Opzionale</span>
+      <h3>Assistenza Stradale</h3>
+      <p>Soccorso 24/7, traino gratuito, auto sostitutiva e rimborso spese alberghiere in caso di fermo prolungato.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE FORM -->
+<section id="preventivo" class="form-section">
+  <div class="centered">
+    <span class="section-label">Preventivo gratuito</span>
+    <h2 class="section-title">Il tuo preventivo<br>personalizzato</h2>
+    <p class="section-sub">Solo 3 dati. Nessuna registrazione. Risultati in 30 secondi.</p>
+  </div>
+
+  <div class="quote-box">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Targa del veicolo</label>
+        <input type="text" placeholder="es. AB123CD" maxlength="7" style="text-transform:uppercase">
+      </div>
+      <div class="form-group">
+        <label>CAP di residenza</label>
+        <input type="text" placeholder="es. 20121" maxlength="5">
+      </div>
+    </div>
+    <div class="form-row single">
+      <div class="form-group">
+        <label>Data di nascita del contraente</label>
+        <input type="date">
+      </div>
+    </div>
+    <button class="btn-primary form-submit" onclick="this.textContent='Calcolo in corso…';setTimeout(()=>this.textContent='Confronta ora →',2000)">
+      Confronta ora →
+    </button>
+    <p class="form-note">🔒 Dati protetti · Nessun costo · Nessun obbligo di acquisto</p>
+  </div>
+</section>
+
+<!-- BENEFITS -->
+<section class="benefits-section">
+  <div class="centered">
+    <span class="section-label">I numeri che contano</span>
+    <h2 class="section-title">Perché scegliere<br>RisparmioFacile Auto</h2>
+  </div>
+  <div class="benefits-row">
+    <div class="benefit-item reveal">
+      <span class="benefit-num">€261</span>
+      <span class="benefit-label">Risparmio medio annuo<br>dei nostri clienti sulla RC Auto</span>
+    </div>
+    <div class="benefit-item reveal">
+      <span class="benefit-num">3 min</span>
+      <span class="benefit-label">Tempo medio per ottenere<br>un preventivo completo</span>
+    </div>
+    <div class="benefit-item reveal">
+      <span class="benefit-num">0</span>
+      <span class="benefit-label">Documenti cartacei richiesti.<br>Tutto 100% digitale.</span>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner">
+  <h2>Stai pagando troppo<br>la tua RC Auto.</h2>
+  <p>Scoprilo in 3 minuti. Confronto gratuito, senza impegno.</p>
+  <a href="#preventivo" class="btn-primary" style="font-size:1rem;padding:1.05rem 2.6rem">Calcola il risparmio →</a>
+  <div class="cta-trust-note">🏛️ IVASS Registrato &nbsp;·&nbsp; 🔐 SSL 256-bit &nbsp;·&nbsp; 🇮🇹 Assistenza italiana</div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand">
+      <a class="logo" href="index.html">Risparmio<span>Facile</span></a>
+      <p class="footer-tagline">Il comparatore assicurativo italiano. Intermediario IVASS registrato. Confronto gratuito e neutrale.</p>
+      <div class="footer-social">
+        <a class="social-btn" href="#" aria-label="LinkedIn">in</a>
+        <a class="social-btn" href="#" aria-label="Instagram">ig</a>
+        <a class="social-btn" href="#" aria-label="X">𝕏</a>
+        <a class="social-btn" href="#" aria-label="Facebook">f</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>Prodotti</h5>
+      <ul>
+        <li><a href="polizza-auto.html">Polizza Auto</a></li>
+        <li><a href="polizza-casa.html">Polizza Casa</a></li>
+        <li><a href="piano-pensione.html">Piano Pensione</a></li>
+        <li><a href="#">Polizza Vita</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Azienda</h5>
+      <ul>
+        <li><a href="#">Chi siamo</a></li>
+        <li><a href="#">Blog & Guide</a></li>
+        <li><a href="#">Lavora con noi</a></li>
+        <li><a href="#">Sala stampa</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Supporto</h5>
+      <ul>
+        <li><a href="#">Centro assistenza</a></li>
+        <li><a href="#">Gestione sinistri</a></li>
+        <li><a href="#">Contattaci</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-trust">
+    <span class="ftrust-label">Certificazioni</span>
+    <div class="ftrust-badge"><span class="ftb-dot"></span> IVASS Registrato</div>
+    <div class="ftrust-badge"><span class="ftb-dot"></span> SSL 256-bit</div>
+    <div class="ftrust-badge"><span class="ftb-dot"></span> GDPR Compliant</div>
+    <div class="ftrust-badge"><span class="ftb-dot"></span> Trustpilot 4.9 ★</div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2026 RisparmioFacile S.r.l. — P.IVA IT00000000000 — Intermediario IVASS iscritto al RUI</p>
+    <div class="footer-links"><a href="#">Privacy</a><a href="#">Termini</a><a href="#">Cookie</a></div>
+  </div>
+</footer>
+
+<a class="floating-badge" href="#preventivo">🚗 Preventivo gratis</a>
+
+<script>
+/* reveal */
+const ro = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
+},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* animate bars */
+const barObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill[data-width]').forEach(bar=>{
+        setTimeout(()=>{ bar.style.width = bar.dataset.width; },200);
+      });
+      barObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+document.querySelector('.bar-chart') && barObs.observe(document.querySelector('.bar-chart'));
+
+/* counters */
+function animateCounter(el){
+  const target=parseFloat(el.dataset.target),prefix=el.dataset.prefix||'',suffix=el.dataset.suffix||'',isFloat=el.dataset.float!==undefined,dur=1800,start=performance.now();
+  (function step(now){const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3),val=target*ease;el.textContent=prefix+(isFloat?val.toFixed(1):Math.floor(val))+suffix;if(p<1)requestAnimationFrame(step);})(start);
+}
+const co=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounter(e.target);co.unobserve(e.target);}});},{threshold:.5});
+document.querySelectorAll('.hstat-num[data-target]').forEach(el=>co.observe(el));
+</script>
+</body>
+</html>
