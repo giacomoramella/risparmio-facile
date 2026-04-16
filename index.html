@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RisparmioFacile – Confronta e Risparmia su Tutto</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #00E07A;
+    --green-dark: #00b862;
+    --navy: #0a0f1e;
+    --navy-mid: #111827;
+    --navy-light: #1a2235;
+    --slate: #8892a4;
+    --white: #f5f7fa;
+    --card-bg: rgba(255,255,255,0.04);
+    --card-border: rgba(255,255,255,0.08);
+    --radius: 20px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+  }
+
+  /* ── NOISE TEXTURE ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+    pointer-events: none; z-index: 0; opacity: .5;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: rgba(10,15,30,0.85);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .logo {
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.4rem;
+    color: var(--white);
+    text-decoration: none;
+    display: flex; align-items: center; gap: .4rem;
+  }
+
+  .logo span { color: var(--green); }
+
+  nav ul {
+    list-style: none;
+    display: flex; gap: 2rem;
+  }
+
+  nav ul a {
+    text-decoration: none; color: var(--slate);
+    font-size: .9rem; font-weight: 500;
+    transition: color .2s;
+  }
+
+  nav ul a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: var(--green);
+    color: var(--navy) !important;
+    padding: .55rem 1.4rem;
+    border-radius: 50px;
+    font-weight: 600 !important;
+    font-size: .88rem !important;
+    transition: background .2s, transform .15s !important;
+  }
+
+  .nav-cta:hover { background: var(--green-dark) !important; transform: translateY(-1px); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 8rem 5vw 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* animated gradient blobs */
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: .18;
+    animation: drift 10s ease-in-out infinite alternate;
+  }
+  .blob-1 { width: 600px; height: 600px; background: var(--green); top: -200px; left: -150px; animation-delay: 0s; }
+  .blob-2 { width: 400px; height: 400px; background: #0066ff; bottom: 0; right: -100px; animation-delay: -4s; }
+  .blob-3 { width: 300px; height: 300px; background: var(--green); bottom: 100px; left: 30%; animation-delay: -7s; }
+
+  @keyframes drift {
+    from { transform: translate(0, 0) scale(1); }
+    to   { transform: translate(40px, 30px) scale(1.08); }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(0,224,122,.1);
+    border: 1px solid rgba(0,224,122,.25);
+    color: var(--green);
+    font-size: .8rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    padding: .4rem 1rem; border-radius: 50px;
+    margin-bottom: 2rem;
+    animation: fadeUp .6s ease both;
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 6vw, 5.2rem);
+    font-weight: 800; line-height: 1.08;
+    max-width: 800px;
+    animation: fadeUp .7s .1s ease both;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--green);
+    position: relative;
+  }
+
+  .hero h1 em::after {
+    content: '';
+    position: absolute; bottom: 4px; left: 0; right: 0; height: 3px;
+    background: var(--green); border-radius: 2px; opacity: .4;
+  }
+
+  .hero p {
+    color: var(--slate); font-size: 1.15rem; line-height: 1.7;
+    max-width: 560px; margin: 1.5rem auto 0;
+    animation: fadeUp .7s .2s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+    margin-top: 2.5rem;
+    animation: fadeUp .7s .3s ease both;
+  }
+
+  .btn-primary {
+    background: var(--green); color: var(--navy);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1rem;
+    padding: .9rem 2.2rem; border-radius: 50px;
+    text-decoration: none; border: none; cursor: pointer;
+    transition: transform .2s, box-shadow .2s;
+    box-shadow: 0 0 30px rgba(0,224,122,.25);
+  }
+
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 40px rgba(0,224,122,.4); }
+
+  .btn-secondary {
+    background: transparent; color: var(--white);
+    font-family: 'Syne', sans-serif; font-weight: 600; font-size: 1rem;
+    padding: .9rem 2.2rem; border-radius: 50px;
+    text-decoration: none; border: 1px solid var(--card-border);
+    transition: border-color .2s, background .2s;
+  }
+
+  .btn-secondary:hover { border-color: rgba(255,255,255,.3); background: rgba(255,255,255,.04); }
+
+  /* stats strip */
+  .stats-strip {
+    display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;
+    margin-top: 4rem; position: relative; z-index: 1;
+    animation: fadeUp .7s .45s ease both;
+  }
+
+  .stat-item { text-align: center; }
+  .stat-item .num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--green);
+    display: block;
+  }
+  .stat-item .label { color: var(--slate); font-size: .82rem; }
+
+  .stat-divider { width: 1px; background: var(--card-border); }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── SECTION LAYOUT ── */
+  section { padding: 6rem 5vw; position: relative; }
+  .section-label {
+    font-size: .78rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--green); margin-bottom: .75rem;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem); font-weight: 800; line-height: 1.15;
+    max-width: 520px;
+  }
+  .section-sub { color: var(--slate); font-size: 1rem; line-height: 1.7; max-width: 480px; margin-top: .75rem; }
+  .centered { text-align: center; }
+  .centered .section-title, .centered .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* ── SERVICES GRID ── */
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1.25rem;
+    margin-top: 3.5rem;
+  }
+
+  .service-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 2rem 1.75rem;
+    cursor: pointer;
+    transition: transform .25s, border-color .25s, background .25s;
+    position: relative; overflow: hidden;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--green), transparent);
+    opacity: 0; transition: opacity .3s;
+  }
+
+  .service-card:hover { transform: translateY(-6px); border-color: rgba(0,224,122,.2); background: rgba(0,224,122,.04); }
+  .service-card:hover::before { opacity: 1; }
+
+  .service-icon {
+    width: 48px; height: 48px;
+    background: rgba(0,224,122,.1); border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem; margin-bottom: 1.25rem;
+  }
+
+  .service-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1.1rem; margin-bottom: .5rem;
+  }
+
+  .service-card p { color: var(--slate); font-size: .88rem; line-height: 1.6; }
+
+  .service-card .savings-tag {
+    display: inline-block; margin-top: 1rem;
+    background: rgba(0,224,122,.1); color: var(--green);
+    font-size: .78rem; font-weight: 600; letter-spacing: .04em;
+    padding: .3rem .75rem; border-radius: 50px;
+  }
+
+  /* ── HOW IT WORKS ── */
+  .how-section { background: var(--navy-mid); }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 2rem; margin-top: 3.5rem;
+    position: relative;
+  }
+
+  .step {
+    position: relative; padding-top: 1rem;
+  }
+
+  .step-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 4rem; font-weight: 800;
+    color: rgba(0,224,122,.1); line-height: 1;
+    margin-bottom: .5rem;
+  }
+
+  .step h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.05rem; font-weight: 700; margin-bottom: .5rem;
+  }
+
+  .step p { color: var(--slate); font-size: .88rem; line-height: 1.6; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-section { background: var(--navy); }
+
+  .tab-bar {
+    display: flex; gap: .5rem; flex-wrap: wrap;
+    margin-top: 2.5rem; margin-bottom: 2.5rem;
+  }
+
+  .tab-btn {
+    padding: .5rem 1.2rem; border-radius: 50px;
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    color: var(--slate); font-size: .88rem; font-weight: 500;
+    cursor: pointer; transition: all .2s; font-family: 'DM Sans', sans-serif;
+  }
+
+  .tab-btn.active, .tab-btn:hover {
+    background: var(--green); color: var(--navy);
+    border-color: var(--green); font-weight: 600;
+  }
+
+  .offers-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .offer-card {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 1.75rem;
+    transition: transform .25s, border-color .25s;
+    position: relative;
+  }
+
+  .offer-card.featured {
+    border-color: rgba(0,224,122,.35);
+    background: rgba(0,224,122,.05);
+  }
+
+  .offer-card.featured::after {
+    content: '🏆 Migliore offerta';
+    position: absolute; top: -1px; right: 1.5rem;
+    background: var(--green); color: var(--navy);
+    font-size: .72rem; font-weight: 700;
+    padding: .25rem .75rem; border-radius: 0 0 10px 10px;
+  }
+
+  .offer-card:hover { transform: translateY(-4px); border-color: rgba(0,224,122,.25); }
+
+  .offer-logo {
+    width: 80px; height: 32px;
+    background: rgba(255,255,255,.06); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .75rem; font-weight: 700; color: var(--slate);
+    margin-bottom: 1.25rem;
+  }
+
+  .offer-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700; margin-bottom: .3rem;
+  }
+
+  .offer-price {
+    display: flex; align-items: baseline; gap: .3rem; margin: 1rem 0;
+  }
+
+  .offer-price .amount {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem; font-weight: 800; color: var(--white);
+  }
+
+  .offer-price .period { color: var(--slate); font-size: .85rem; }
+
+  .offer-saving {
+    font-size: .82rem; color: var(--green); font-weight: 600; margin-bottom: 1rem;
+  }
+
+  .offer-features { list-style: none; margin-bottom: 1.25rem; }
+  .offer-features li {
+    font-size: .82rem; color: var(--slate);
+    padding: .25rem 0;
+    display: flex; align-items: center; gap: .5rem;
+  }
+  .offer-features li::before { content: '✓'; color: var(--green); font-weight: 700; }
+
+  .btn-offer {
+    display: block; text-align: center;
+    background: var(--green); color: var(--navy);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .88rem;
+    padding: .75rem; border-radius: 12px;
+    text-decoration: none; cursor: pointer; border: none; width: 100%;
+    transition: transform .2s, box-shadow .2s;
+  }
+
+  .btn-offer:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,224,122,.3); }
+
+  /* ── TRUST ── */
+  .trust-section { background: var(--navy-mid); }
+
+  .trust-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+
+  .trust-item {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 2rem 1.75rem;
+    text-align: center;
+  }
+
+  .trust-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .trust-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700; font-size: 1rem; margin-bottom: .5rem;
+  }
+  .trust-item p { color: var(--slate); font-size: .85rem; line-height: 1.6; }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem; margin-top: 3.5rem;
+  }
+
+  .testimonial {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: var(--radius); padding: 2rem;
+  }
+
+  .stars { color: #ffc32b; margin-bottom: .75rem; font-size: .95rem; letter-spacing: 2px; }
+  .testimonial blockquote {
+    font-style: italic; color: var(--white); font-size: .92rem; line-height: 1.7;
+    margin-bottom: 1.25rem;
+  }
+  .author { display: flex; align-items: center; gap: .75rem; }
+  .author-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: .88rem; color: var(--navy);
+  }
+  .author-name { font-size: .88rem; font-weight: 600; }
+  .author-loc { font-size: .78rem; color: var(--slate); }
+
+  /* ── PARTNERS ── */
+  .partners-row {
+    display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+    margin-top: 3rem;
+  }
+
+  .partner-chip {
+    background: var(--card-bg); border: 1px solid var(--card-border);
+    border-radius: 12px; padding: .65rem 1.4rem;
+    font-size: .82rem; font-weight: 600; color: var(--slate);
+    letter-spacing: .03em; transition: border-color .2s, color .2s;
+  }
+
+  .partner-chip:hover { border-color: rgba(0,224,122,.3); color: var(--white); }
+
+  /* ── CTA BANNER ── */
+  .cta-banner {
+    background: linear-gradient(135deg, rgba(0,224,122,.12), rgba(0,102,255,.08));
+    border: 1px solid rgba(0,224,122,.2);
+    border-radius: 24px;
+    padding: 4rem 3rem; text-align: center;
+    margin: 0 5vw 6rem;
+    position: relative; overflow: hidden;
+  }
+
+  .cta-banner::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 0%, rgba(0,224,122,.1), transparent 60%);
+  }
+
+  .cta-banner h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 3.5vw, 2.5rem); font-weight: 800;
+    margin-bottom: 1rem; position: relative;
+  }
+
+  .cta-banner p { color: var(--slate); font-size: 1rem; margin-bottom: 2rem; position: relative; }
+
+  /* ── FAQ ── */
+  .faq-list { max-width: 720px; margin: 3rem auto 0; }
+
+  .faq-item {
+    border-bottom: 1px solid var(--card-border);
+    overflow: hidden;
+  }
+
+  .faq-question {
+    width: 100%; background: none; border: none;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.25rem 0; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: .95rem; font-weight: 500;
+    color: var(--white); text-align: left;
+    transition: color .2s;
+  }
+
+  .faq-question:hover { color: var(--green); }
+
+  .faq-chevron { font-size: 1rem; color: var(--green); transition: transform .3s; }
+  .faq-item.open .faq-chevron { transform: rotate(180deg); }
+
+  .faq-answer {
+    max-height: 0; overflow: hidden; transition: max-height .35s ease;
+    color: var(--slate); font-size: .88rem; line-height: 1.7;
+  }
+
+  .faq-answer p { padding-bottom: 1.25rem; }
+  .faq-item.open .faq-answer { max-height: 300px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--navy-mid);
+    border-top: 1px solid var(--card-border);
+    padding: 4rem 5vw 2rem;
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 3rem; margin-bottom: 3rem;
+  }
+
+  footer .logo { font-size: 1.2rem; margin-bottom: .75rem; }
+  .footer-desc { color: var(--slate); font-size: .85rem; line-height: 1.7; max-width: 280px; }
+  .footer-col h5 {
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
+    text-transform: uppercase; letter-spacing: .07em; margin-bottom: 1rem; color: var(--slate);
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col ul li { margin-bottom: .5rem; }
+  .footer-col ul a { text-decoration: none; color: var(--slate); font-size: .85rem; transition: color .2s; }
+  .footer-col ul a:hover { color: var(--white); }
+
+  .footer-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 1rem;
+    padding-top: 2rem; border-top: 1px solid var(--card-border);
+  }
+
+  .footer-bottom p { color: var(--slate); font-size: .78rem; }
+  .footer-links { display: flex; gap: 1.5rem; }
+  .footer-links a { color: var(--slate); text-decoration: none; font-size: .78rem; }
+  .footer-links a:hover { color: var(--white); }
+
+  /* ── FLOATING BADGE ── */
+  .floating-badge {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 50;
+    background: var(--green); color: var(--navy);
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
+    padding: .75rem 1.5rem; border-radius: 50px;
+    box-shadow: 0 8px 30px rgba(0,224,122,.35);
+    cursor: pointer; text-decoration: none;
+    animation: pulse 2.5s ease-in-out infinite;
+    transition: transform .2s;
+  }
+
+  .floating-badge:hover { transform: scale(1.05); }
+
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 8px 30px rgba(0,224,122,.35); }
+    50% { box-shadow: 0 8px 50px rgba(0,224,122,.6); }
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    nav ul { display: none; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .stat-divider { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">Risparmio<span>Facile</span></a>
+  <ul>
+    <li><a href="#servizi">Servizi</a></li>
+    <li><a href="#come-funziona">Come funziona</a></li>
+    <li><a href="#offerte">Offerte</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="#inizia" class="nav-cta">Inizia gratis →</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+
+  <div class="hero-badge">✦ Servizio 100% gratuito</div>
+
+  <h1>
+    Smetti di pagare<br>
+    troppo per i tuoi<br>
+    <em>contratti</em>
+  </h1>
+
+  <p>Confrontiamo le offerte di luce, gas, telefonia, assicurazioni e mutui su misura per te. In pochi clic, senza burocrazia, senza costi.</p>
+
+  <div class="hero-actions">
+    <a href="#offerte" class="btn-primary">Confronta ora — è gratis</a>
+    <a href="#come-funziona" class="btn-secondary">Come funziona?</a>
+  </div>
+
+  <div class="stats-strip">
+    <div class="stat-item">
+      <span class="num">340k+</span>
+      <span class="label">Utenti registrati</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="num">€18M+</span>
+      <span class="label">Risparmiati</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="num">4.9 ★</span>
+      <span class="label">Su Trustpilot</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="num">60+</span>
+      <span class="label">Partner attivi</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servizi">
+  <div class="centered">
+    <div class="section-label">I nostri servizi</div>
+    <h2 class="section-title">Tutto quello che paghi, analizzato per te</h2>
+    <p class="section-sub">Dalla bolletta alla polizza auto: troviamo le offerte migliori e gestiamo tutto noi.</p>
+  </div>
+
+  <div class="services-grid">
+    <div class="service-card">
+      <div class="service-icon">⚡</div>
+      <h3>Luce & Gas</h3>
+      <p>Analizziamo la tua bolletta e troviamo offerte realmente più convenienti in base ai tuoi consumi.</p>
+      <span class="savings-tag">Fino a €450/anno</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🌐</div>
+      <h3>Internet Casa</h3>
+      <p>Fibra, ADSL o FWA: confrontiamo le offerte disponibili al tuo indirizzo per velocità e prezzo.</p>
+      <span class="savings-tag">Fino a €240/anno</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">📱</div>
+      <h3>Telefonia Mobile</h3>
+      <p>Giga, minuti e SMS illimitati al miglior prezzo. Cambia operatore in 3 minuti senza stress.</p>
+      <span class="savings-tag">Fino a €180/anno</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🛡️</div>
+      <h3>Assicurazioni</h3>
+      <p>RC Auto, casa e vita: preventivi personalizzati da decine di compagnie in un colpo solo.</p>
+      <span class="savings-tag">Fino a €320/anno</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">🏠</div>
+      <h3>Mutui & Surroghe</h3>
+      <p>Tasso fisso o variabile? Ti confrontiamo le offerte delle principali banche italiane gratuitamente.</p>
+      <span class="savings-tag">Risparmia sulla rata</span>
+    </div>
+    <div class="service-card">
+      <div class="service-icon">💳</div>
+      <h3>Conti & Carte</h3>
+      <p>Conto corrente, carte prepagate e conti deposito: trova il prodotto finanziario che fa per te.</p>
+      <span class="savings-tag">Zero canone possibile</span>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="come-funziona" class="how-section">
+  <div class="section-label">Come funziona</div>
+  <h2 class="section-title">Tre passi e risparmi. Davvero.</h2>
+  <p class="section-sub">Nessuna telefonata commerciale, nessun dato venduto a terzi. Solo risparmio concreto.</p>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <h3>Inserisci la tua situazione attuale</h3>
+      <p>Carica la bolletta o inserisci manualmente i tuoi dati. Basta un minuto.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <h3>Analizziamo e confrontiamo</h3>
+      <p>Il nostro motore analizza oltre 60 fornitori e ti mostra solo le offerte davvero migliorative.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <h3>Scegli e rilassati</h3>
+      <p>Confermi l'offerta e ci occupiamo noi di tutta la burocrazia del cambio. Gratis, sempre.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">04</div>
+      <h3>Rimani aggiornato</h3>
+      <p>Ti avvisiamo quando sul mercato escono offerte migliori di quelle che hai attivo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- OFFERS COMPARE -->
+<section id="offerte" class="compare-section">
+  <div class="section-label">Confronta le offerte</div>
+  <h2 class="section-title">Le migliori offerte di oggi</h2>
+  <p class="section-sub">Selezionate in tempo reale dai nostri partner. Scegli la tua categoria.</p>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="filterOffers('luce')">⚡ Luce & Gas</button>
+    <button class="tab-btn" onclick="filterOffers('internet')">🌐 Internet</button>
+    <button class="tab-btn" onclick="filterOffers('mobile')">📱 Mobile</button>
+    <button class="tab-btn" onclick="filterOffers('assicurazione')">🛡️ Assicurazione</button>
+  </div>
+
+  <div class="offers-grid" id="offers-container"></div>
+</section>
+
+<!-- TRUST -->
+<section class="trust-section centered">
+  <div class="section-label">Perché sceglierci</div>
+  <h2 class="section-title">La trasparenza prima di tutto</h2>
+  <p class="section-sub">Se non puoi risparmiare, te lo diciamo chiaramente. Nessun cambio forzato.</p>
+
+  <div class="trust-grid">
+    <div class="trust-item">
+      <div class="trust-icon">🆓</div>
+      <h4>Sempre gratuito</h4>
+      <p>Guadagniamo commissioni dai fornitori quando attivi un'offerta. Tu non paghi mai nulla.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🔒</div>
+      <h4>Dati protetti</h4>
+      <p>Non vendiamo i tuoi dati a terzi. Mai. Le tue informazioni rimangono al sicuro.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🚫</div>
+      <h4>Zero telefonate</h4>
+      <p>Tutto digitale. Nessun operatore ti chiamerà per spingerti a cambiare contratto.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-icon">🤝</div>
+      <h4>Indipendenti</h4>
+      <p>Ti proponiamo solo offerte che ti convengono. Se non ne esistono, te lo diciamo senza problemi.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section>
+  <div class="centered">
+    <div class="section-label">Recensioni</div>
+    <h2 class="section-title">Cosa dicono i nostri utenti</h2>
+  </div>
+
+  <div class="testimonials-grid">
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Ho risparmiato €38 al mese sulla bolletta del gas semplicemente caricando la mia ultima fattura. Procedura semplicissima, l'han gestita tutta loro."</blockquote>
+      <div class="author">
+        <div class="author-avatar" style="background:#00E07A">MM</div>
+        <div>
+          <div class="author-name">Marco M.</div>
+          <div class="author-loc">Milano</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★★</div>
+      <blockquote>"Finalmente un servizio che non ti bombarda di telefonate. Ho cambiato operatore mobile e internet in 5 minuti. Consigliatissimo."</blockquote>
+      <div class="author">
+        <div class="author-avatar" style="background:#0066ff">SA</div>
+        <div>
+          <div class="author-name">Sara A.</div>
+          <div class="author-loc">Roma</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial">
+      <div class="stars">★★★★☆</div>
+      <blockquote>"Mi ha detto onestamente che la mia tariffa era già buona per la luce, ma mi ha fatto risparmiare 200€ sull'assicurazione auto. Molto professionale."</blockquote>
+      <div class="author">
+        <div class="author-avatar" style="background:#ff6b35">LR</div>
+        <div>
+          <div class="author-name">Luca R.</div>
+          <div class="author-loc">Torino</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARTNERS -->
+<section style="background: var(--navy-mid); padding: 4rem 5vw;">
+  <div class="centered">
+    <div class="section-label">I nostri partner</div>
+    <h2 class="section-title" style="font-size: 1.6rem;">Collaboriamo con i migliori fornitori italiani</h2>
+  </div>
+
+  <div class="partners-row">
+    <div class="partner-chip">Enel Energia</div>
+    <div class="partner-chip">Plenitude</div>
+    <div class="partner-chip">Edison</div>
+    <div class="partner-chip">Sorgenia</div>
+    <div class="partner-chip">Iliad</div>
+    <div class="partner-chip">Vodafone</div>
+    <div class="partner-chip">WindTre</div>
+    <div class="partner-chip">Fastweb</div>
+    <div class="partner-chip">TIM</div>
+    <div class="partner-chip">Sky WiFi</div>
+    <div class="partner-chip">Generali</div>
+    <div class="partner-chip">UnipolSai</div>
+    <div class="partner-chip">A2A Energia</div>
+    <div class="partner-chip">Iren</div>
+    <div class="partner-chip">Octopus Energy</div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="centered">
+    <div class="section-label">FAQ</div>
+    <h2 class="section-title">Domande frequenti</h2>
+  </div>
+
+  <div class="faq-list">
+    <div class="faq-item open">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Perché il servizio è gratuito?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer"><p>RisparmioFacile guadagna una commissione dai fornitori partner ogni volta che un utente attiva un'offerta tramite la nostra piattaforma. Questo non influenza la nostra neutralità: ti proponiamo sempre l'offerta migliore per te, non quella più remunerativa per noi.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Il cambio fornitore interrompe il servizio?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer"><p>Assolutamente no. Il cambio di fornitore per luce, gas e telefonia non comporta alcuna interruzione del servizio. Per internet potrebbe essere necessario un breve intervento tecnico per il router, ma il vecchio contratto rimane attivo fino all'attivazione del nuovo.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Cosa succede se non posso risparmiare?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer"><p>Te lo diciamo chiaramente! Circa il 10-15% dei nostri utenti ha già tariffe ottimizzate. In quel caso non ti proponiamo nessun cambio inutile. La trasparenza è il fondamento del nostro modello di business.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        I miei dati sono al sicuro?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer"><p>Sì. Non vendiamo i tuoi dati a terzi per fini commerciali. I dati sono trattati esclusivamente per fornirti le analisi e gestire le pratiche burocratiche. Puoi richiedere la cancellazione in qualsiasi momento.</p></div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-question" onclick="toggleFaq(this)">
+        Funziona anche per aziende e Partite IVA?
+        <span class="faq-chevron">▼</span>
+      </button>
+      <div class="faq-answer"><p>Sì! RisparmioFacile supporta anche PMI, liberi professionisti e attività commerciali. Il processo è lo stesso: carica una bolletta recente e lasciaci fare l'analisi. Se esiste un risparmio, te lo troviamo.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner" id="inizia">
+  <h2>Inizia a risparmiare oggi.<br>Ci vogliono 3 minuti.</h2>
+  <p>Oltre 340.000 persone lo hanno già fatto. Cosa aspetti?</p>
+  <a href="#" class="btn-primary" style="font-size: 1rem; padding: 1rem 2.5rem;">Confronta gratis →</a>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <a class="logo" href="#">Risparmio<span>Facile</span></a>
+      <p class="footer-desc">Il comparatore italiano che analizza la tua situazione e gestisce il cambio al posto tuo. Gratis, sempre.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Servizi</h5>
+      <ul>
+        <li><a href="#">Luce & Gas</a></li>
+        <li><a href="#">Internet Casa</a></li>
+        <li><a href="#">Telefonia Mobile</a></li>
+        <li><a href="#">Assicurazioni</a></li>
+        <li><a href="#">Mutui</a></li>
+        <li><a href="#">Conti & Carte</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Azienda</h5>
+      <ul>
+        <li><a href="#">Chi siamo</a></li>
+        <li><a href="#">Blog</a></li>
+        <li><a href="#">Lavora con noi</a></li>
+        <li><a href="#">Diventa partner</a></li>
+        <li><a href="#">Stampa</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Supporto</h5>
+      <ul>
+        <li><a href="#">FAQ</a></li>
+        <li><a href="#">Contattaci</a></li>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Termini di Servizio</a></li>
+        <li><a href="#">Cookie</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 RisparmioFacile S.r.l. — P.IVA IT00000000000</p>
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Termini</a>
+      <a href="#">Cookie</a>
+    </div>
+  </div>
+</footer>
+
+<!-- FLOATING CTA -->
+<a class="floating-badge" href="#offerte">🔍 Confronta ora</a>
+
+<script>
+  // ── OFFERS DATA ──
+  const offers = {
+    luce: [
+      { logo: 'Enel', name: 'Mono Ora Verde', price: '€142', period: '/mese', saving: 'Risparmi €38/mese', features: ['Prezzo bloccato 12 mesi', '100% energia rinnovabile', 'App MyEnel inclusa'], featured: true },
+      { logo: 'Sorgenia', name: 'NextEnergy Sunlight', price: '€155', period: '/mese', saving: 'Risparmi €25/mese', features: ['Energia 100% verde', 'Bonus benvenuto €50', 'Nessuna penale uscita'], featured: false },
+      { logo: 'Edison', name: 'Trend Gas&Luce', price: '€161', period: '/mese', saving: 'Risparmi €19/mese', features: ['Tariffa monoraria', 'Bollette mensili', 'Attivazione online gratuita'], featured: false },
+    ],
+    internet: [
+      { logo: 'Fastweb', name: 'Fastweb Casa 2.5Gb', price: '€27.95', period: '/mese', saving: 'Velocità: 2.5 Gb/s', features: ['Fibra FTTH', 'Modem incluso gratis', 'Attivazione €0'], featured: true },
+      { logo: 'Tim', name: 'TIM Super Fibra', price: '€29.90', period: '/mese', saving: 'Velocità: 1 Gb/s', features: ['Fibra FTTP', '1000 GB roaming EU', 'Tim Vision incluso 3 mesi'], featured: false },
+      { logo: 'Sky WiFi', name: 'Sky WiFi Top', price: '€24.90', period: '/mese', saving: 'Velocità: 1 Gb/s', features: ['Fibra ultra-veloce', 'Sky Q incluso', 'Nessun vincolo'], featured: false },
+    ],
+    mobile: [
+      { logo: 'Iliad', name: 'Giga 250', price: '€9.99', period: '/mese', saving: 'Risparmi vs media: €12/mese', features: ['250 GB in 5G', 'Minuti & SMS illimitati', 'Nessun costo attivazione'], featured: true },
+      { logo: 'Fastweb', name: 'Fastweb Mobile FullXS', price: '€7.95', period: '/mese', saving: 'Risparmi vs media: €14/mese', features: ['150 GB in 5G', 'Minuti & SMS illimitati', 'Bonus €5 se cliente casa'], featured: false },
+      { logo: 'WindTre', name: 'GO 5G Easy+', price: '€12.99', period: '/mese', saving: 'Risparmi vs media: €9/mese', features: ['200 GB in 5G', 'Minuti & SMS illimitati', '50GB EU roaming'], featured: false },
+    ],
+    assicurazione: [
+      { logo: 'Generali', name: 'Motor Protetto', price: '€420', period: '/anno', saving: 'Risparmi €180 vs media', features: ['RC Auto completa', 'Assistenza stradale 24/7', 'Bonus malus protetto'], featured: true },
+      { logo: 'UnipolSai', name: 'CU Tutela Auto', price: '€465', period: '/anno', saving: 'Risparmi €135 vs media', features: ['RC + Incendio furto', 'Kasko opzionale', 'App Claims inclusa'], featured: false },
+      { logo: 'Zurich', name: 'Zurich Connect', price: '€398', period: '/anno', saving: 'Risparmi €202 vs media', features: ['Polizza online', 'Scatola nera opzionale', 'Sconto fedeltà 5%'], featured: false },
+    ],
+  };
+
+  function renderOffers(category) {
+    const container = document.getElementById('offers-container');
+    container.innerHTML = '';
+    offers[category].forEach(o => {
+      container.innerHTML += `
+        <div class="offer-card ${o.featured ? 'featured' : ''}">
+          <div class="offer-logo">${o.logo}</div>
+          <h4>${o.name}</h4>
+          <div class="offer-price">
+            <span class="amount">${o.price}</span>
+            <span class="period">${o.period}</span>
+          </div>
+          <div class="offer-saving">💰 ${o.saving}</div>
+          <ul class="offer-features">
+            ${o.features.map(f => `<li>${f}</li>`).join('')}
+          </ul>
+          <button class="btn-offer">Attiva questa offerta →</button>
+        </div>
+      `;
+    });
+  }
+
+  function filterOffers(cat) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    renderOffers(cat);
+  }
+
+  // init
+  renderOffers('luce');
+
+  // ── FAQ TOGGLE ──
+  function toggleFaq(btn) {
+    const item = btn.closest('.faq-item');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  // ── SCROLL REVEAL ──
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.service-card, .step, .trust-item, .testimonial, .offer-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity .5s ease, transform .5s ease';
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
