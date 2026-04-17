@@ -78,6 +78,32 @@
   .form-submit { width: 100%; margin-top: 1.5rem; font-size: 1.05rem; padding: 1rem; border-radius: 14px; }
   .form-note { text-align: center; font-size: .78rem; color: var(--text-muted); margin-top: 1rem; }
 
+  /* ── VALIDATION + LOADING + RESULTS ── */
+  .field-err { display:none; color:#d43a2f; font-size:.75rem; margin-top:.2rem; }
+  .form-loading { display:none; align-items:center; justify-content:center; gap:1rem; padding:2rem; color:var(--text-muted); font-size:.9rem; margin-top:1.5rem; }
+  .spinner { width:28px; height:28px; border:3px solid var(--border); border-top-color:var(--green-dark); border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .results-wrap { display:none; margin-top:1.5rem; animation:fadeUp .4s ease-out; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);} }
+  .res-header { display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:.75rem; margin-bottom:1rem; }
+  .res-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; color:var(--text); display:block; }
+  .res-sub { font-size:.78rem; color:var(--text-muted); display:block; margin-top:.25rem; }
+  .risk-badge { display:inline-block; font-size:.72rem; font-weight:600; padding:.2rem .6rem; border-radius:50px; margin-left:.5rem; }
+  .risk-high { background:rgba(212,58,47,.1); color:#d43a2f; }
+  .risk-mid  { background:rgba(230,160,0,.12); color:#a06000; }
+  .risk-low  { background:rgba(61,214,140,.12); color:#1a7a4a; }
+  .res-table { width:100%; border-collapse:collapse; font-size:.875rem; }
+  .res-table thead th { padding:.6rem .75rem; text-align:left; font-size:.72rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); border-bottom:2px solid var(--border); }
+  .res-table tbody td { padding:.75rem; vertical-align:middle; border-bottom:1px solid var(--border); color:var(--text-muted); }
+  .res-table tbody td:first-child { color:var(--text); }
+  .res-table tbody tr.best-row td { background:rgba(61,214,140,.06); }
+  .res-table tbody tr:last-child td { border-bottom:none; }
+  .best-badge { display:inline-block; background:var(--green-dark); color:#fff; font-size:.65rem; font-weight:700; padding:.15rem .5rem; border-radius:50px; margin-left:.5rem; vertical-align:middle; }
+  .res-price { font-family:'Syne',sans-serif; font-weight:700; color:var(--primary); white-space:nowrap; }
+  .btn-attiva { background:var(--primary); color:#fff; border:none; border-radius:8px; padding:.45rem .9rem; font-size:.8rem; font-weight:600; cursor:pointer; transition:background .2s,transform .15s; font-family:'DM Sans',sans-serif; }
+  .btn-attiva:hover { background:var(--green-dark); transform:translateY(-1px); }
+  .res-note { font-size:.72rem; color:var(--text-muted); margin-top:.75rem; }
+
   /* ── BENEFITS ── */
   .benefits-section { background: var(--bg-alt); }
   .benefits-row {
@@ -240,23 +266,28 @@
     <div class="form-row">
       <div class="form-group">
         <label>Targa del veicolo</label>
-        <input type="text" placeholder="es. AB123CD" maxlength="7" style="text-transform:uppercase">
+        <input type="text" id="a-targa" placeholder="es. AB123CD" maxlength="7" style="text-transform:uppercase">
+        <span class="field-err" id="a-targa-err"></span>
       </div>
       <div class="form-group">
         <label>CAP di residenza</label>
-        <input type="text" placeholder="es. 20121" maxlength="5">
+        <input type="text" id="a-cap" placeholder="es. 20121" maxlength="5">
+        <span class="field-err" id="a-cap-err"></span>
       </div>
     </div>
     <div class="form-row single">
       <div class="form-group">
         <label>Data di nascita del contraente</label>
-        <input type="date">
+        <input type="date" id="a-dob">
+        <span class="field-err" id="a-dob-err"></span>
       </div>
     </div>
-    <button class="btn-primary form-submit" onclick="this.textContent='Calcolo in corso…';setTimeout(()=>this.textContent='Confronta ora →',2000)">
+    <button id="a-btn" class="btn-primary form-submit" onclick="confrontaAuto()">
       Confronta ora →
     </button>
     <p class="form-note">🔒 Dati protetti · Nessun costo · Nessun obbligo di acquisto</p>
+    <div class="form-loading" id="a-loading"><div class="spinner"></div>Stiamo confrontando le migliori offerte…</div>
+    <div class="results-wrap" id="a-results"></div>
   </div>
 </section>
 
@@ -348,31 +379,84 @@
 
 <script>
 /* reveal */
-const ro = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});
-},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+const ro=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');ro.unobserve(e.target);}});},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
 document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
 
-/* animate bars */
-const barObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.querySelectorAll('.bar-fill[data-width]').forEach(bar=>{
-        setTimeout(()=>{ bar.style.width = bar.dataset.width; },200);
-      });
-      barObs.unobserve(e.target);
-    }
-  });
-},{threshold:.3});
-document.querySelector('.bar-chart') && barObs.observe(document.querySelector('.bar-chart'));
+/* bar chart */
+const barObs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.querySelectorAll('.bar-fill[data-width]').forEach(bar=>{setTimeout(()=>{bar.style.width=bar.dataset.width;},200);});barObs.unobserve(e.target);}});},{threshold:.3});
+document.querySelector('.bar-chart')&&barObs.observe(document.querySelector('.bar-chart'));
 
 /* counters */
-function animateCounter(el){
-  const target=parseFloat(el.dataset.target),prefix=el.dataset.prefix||'',suffix=el.dataset.suffix||'',isFloat=el.dataset.float!==undefined,dur=1800,start=performance.now();
-  (function step(now){const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3),val=target*ease;el.textContent=prefix+(isFloat?val.toFixed(1):Math.floor(val))+suffix;if(p<1)requestAnimationFrame(step);})(start);
-}
+function animateCounter(el){const target=parseFloat(el.dataset.target),prefix=el.dataset.prefix||'',suffix=el.dataset.suffix||'',isFloat=el.dataset.float!==undefined,dur=1800,start=performance.now();(function step(now){const p=Math.min((now-start)/dur,1),ease=1-Math.pow(1-p,3),val=target*ease;el.textContent=prefix+(isFloat?val.toFixed(1):Math.floor(val))+suffix;if(p<1)requestAnimationFrame(step);})(start);}
 const co=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounter(e.target);co.unobserve(e.target);}});},{threshold:.5});
 document.querySelectorAll('.hstat-num[data-target]').forEach(el=>co.observe(el));
+
+/* ── HELPERS ── */
+function showFe(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';}}
+function hideFe(id){const el=document.getElementById(id);if(el){el.textContent='';el.style.display='none';}}
+function calcAge(dob){const today=new Date(),born=new Date(dob);let age=today.getFullYear()-born.getFullYear();const m=today.getMonth()-born.getMonth();if(m<0||(m===0&&today.getDate()<born.getDate()))age--;return age;}
+function getGeoFactor(cap){const d1=parseInt(cap[0]),d2=parseInt(cap.substring(0,2));if(d1===0)return d2>=7?1.15:1.07;if(d1<=2)return 0.95;if(d1<=4)return 1.0;if(d1<=6)return 1.07;return 1.15;}
+
+/* ── AUTO FORM ── */
+function confrontaAuto(){
+  const targa=document.getElementById('a-targa').value.trim().toUpperCase();
+  const cap=document.getElementById('a-cap').value.trim();
+  const dob=document.getElementById('a-dob').value;
+  let valid=true;
+
+  if(!/^[A-Z0-9]{5,7}$/.test(targa)){showFe('a-targa-err','Inserisci una targa valida (es. AB123CD)');valid=false;}else hideFe('a-targa-err');
+  if(!/^\d{5}$/.test(cap)){showFe('a-cap-err','Inserisci un CAP valido (5 cifre)');valid=false;}else hideFe('a-cap-err');
+  if(!dob){showFe('a-dob-err','Seleziona la tua data di nascita');valid=false;}
+  else{const age=calcAge(dob);if(age<18){showFe('a-dob-err','Devi avere almeno 18 anni');valid=false;}else if(age>90){showFe('a-dob-err','Data di nascita non valida');valid=false;}else hideFe('a-dob-err');}
+  if(!valid)return;
+
+  const btn=document.getElementById('a-btn'),loadEl=document.getElementById('a-loading'),resEl=document.getElementById('a-results');
+  btn.disabled=true;btn.textContent='Calcolo in corso…';loadEl.style.display='flex';resEl.style.display='none';
+
+  setTimeout(()=>{
+    const age=calcAge(dob),geo=getGeoFactor(cap);
+    let af,riskLabel,riskClass;
+    if(age<23){af=1.6;riskLabel='Alto';riskClass='risk-high';}
+    else if(age<26){af=1.45;riskLabel='Alto';riskClass='risk-high';}
+    else if(age<30){af=1.25;riskLabel='Medio';riskClass='risk-mid';}
+    else if(age<40){af=1.0;riskLabel='Basso';riskClass='risk-low';}
+    else if(age<60){af=0.95;riskLabel='Basso';riskClass='risk-low';}
+    else{af=1.08;riskLabel='Medio';riskClass='risk-mid';}
+
+    const companies=[
+      {name:'Generali',   base:650,feat:'RC + Furto & Incendio inclusi',   logo:'🛡️'},
+      {name:'UnipolSai',  base:580,feat:'RC + Scatola nera inclusa',        logo:'🔵'},
+      {name:'Allianz',    base:520,feat:'RC + Kasko + Assistenza h24',      logo:'🔷'},
+      {name:'AXA',        base:490,feat:'RC + Assistenza Premium globale',  logo:'⚡'},
+      {name:'Zurich',     base:470,feat:'RC + Tutela legale inclusa',       logo:'🟢'},
+      {name:'Prima Ass.', base:389,feat:'RC digitale, attivazione in 2 min',logo:'✅'},
+    ];
+    const results=companies.map(c=>({...c,price:Math.round(c.base*af*geo)})).sort((a,b)=>a.price-b.price);
+
+    let html=`<div class="res-header">
+      <div><span class="res-title">🎯 I migliori preventivi per te</span><span class="risk-badge ${riskClass}">Profilo: rischio ${riskLabel}</span></div>
+      <span class="res-sub">Ordinate dal prezzo più basso · Prezzi annuali</span>
+    </div>
+    <table class="res-table"><thead><tr><th>Compagnia</th><th>Copertura inclusa</th><th>Prezzo/anno</th><th></th></tr></thead><tbody>`;
+    results.forEach((c,i)=>{const best=i===0;html+=`<tr${best?' class="best-row"':''}>
+      <td><strong>${c.logo} ${c.name}</strong>${best?'<span class="best-badge">Miglior prezzo</span>':''}</td>
+      <td>${c.feat}</td>
+      <td class="res-price">${best?'<strong>':''}€${c.price.toLocaleString('it-IT')}/anno${best?'</strong>':''}</td>
+      <td><button class="btn-attiva">Attiva →</button></td></tr>`;});
+    html+=`</tbody></table><p class="res-note">* Prezzi personalizzati per profilo età ${age} anni, CAP ${cap}. Cliccando "Attiva" verrai guidato alla sottoscrizione digitale.</p>`;
+
+    btn.disabled=false;btn.textContent='Confronta ora →';
+    loadEl.style.display='none';resEl.innerHTML=html;resEl.style.display='block';
+    resEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },1500);
+}
+/* pre-fill from URL params */
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('targa')) document.getElementById('a-targa').value=p.get('targa').toUpperCase();
+  if(p.get('cap'))   document.getElementById('a-cap').value=p.get('cap');
+})();
 </script>
+<script src="components.js"></script>
 </body>
 </html>

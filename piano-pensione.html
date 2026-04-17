@@ -88,11 +88,68 @@
   }
   .sim-result.show { display: block; }
   .sim-result-title { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 1.25rem; }
-  .sim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-  .sim-item { text-align: center; background: var(--bg-card); border-radius: 12px; padding: 1.25rem; border: 1px solid var(--border); }
-  .sim-num { font-family: 'Syne', sans-serif; font-size: 1.8rem; font-weight: 700; color: var(--primary); display: block; line-height: 1; }
-  .sim-lbl { font-size: .78rem; color: var(--text-muted); margin-top: .35rem; display: block; }
+  .sim-result.show { animation: fadeUpSim .4s ease-out; }
+  @keyframes fadeUpSim { from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:translateY(0);} }
+  .sim-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: .85rem; }
+  .sim-item { text-align: center; background: var(--bg-card); border-radius: 12px; padding: 1rem .75rem; border: 1px solid var(--border); }
+  .sim-num { font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--primary); display: block; line-height: 1; }
+  .sim-lbl { font-size: .7rem; color: var(--text-muted); margin-top: .35rem; display: block; line-height: 1.4; }
   .sim-disclaimer { font-size: .75rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.5; }
+
+  /* ── SHOCK CARDS ── */
+  .shock-section { background: #1a0a0a; padding: 2.5rem 5vw; }
+  .shock-grid { display: grid; grid-template-columns: repeat(auto-fill,minmax(260px,1fr)); gap: 1.25rem; max-width: 900px; margin: 0 auto; }
+  .shock-card {
+    border-radius: var(--radius); padding: 1.75rem;
+    border-left: 4px solid;
+  }
+  .shock-card.red   { background: rgba(200,30,30,.12); border-color: #e03030; }
+  .shock-card.amber { background: rgba(220,120,0,.12); border-color: #e07020; }
+  .shock-card.rust  { background: rgba(180,60,0,.12);  border-color: #c04010; }
+  .shock-num { font-family:'Syne',sans-serif; font-size:1.85rem; font-weight:700; display:block; line-height:1; margin-bottom:.5rem; }
+  .shock-card.red   .shock-num { color:#f05050; }
+  .shock-card.amber .shock-num { color:#e88030; }
+  .shock-card.rust  .shock-num { color:#d06030; }
+  .shock-card h4 { font-family:'Syne',sans-serif; font-size:.95rem; font-weight:700; color:#fff; margin-bottom:.4rem; }
+  .shock-card p  { font-size:.82rem; color:rgba(255,255,255,.6); line-height:1.6; }
+
+  /* ── TRANSFER SECTION ── */
+  .transfer-box {
+    max-width:680px; margin:3rem auto 0;
+    background:var(--bg-card); border:1px solid var(--border-green);
+    border-radius:var(--radius-lg); padding:2.5rem; box-shadow:var(--shadow-md);
+  }
+  .transfer-steps { display:grid; grid-template-columns:repeat(3,1fr); gap:1.25rem; margin:1.5rem 0; }
+  .tr-step { text-align:center; }
+  .tr-step-num { width:36px; height:36px; border-radius:50%; background:var(--green-soft); color:var(--primary); font-family:'Syne',sans-serif; font-weight:700; font-size:.85rem; display:flex; align-items:center; justify-content:center; margin:0 auto .75rem; }
+  .tr-step p { font-size:.82rem; color:var(--text-muted); line-height:1.5; }
+
+  /* ── VS BANCARI TABLE ── */
+  .vs-table-wrap { overflow-x:auto; margin-top:3rem; }
+  .vs-table { width:100%; border-collapse:collapse; background:var(--bg-card); border-radius:var(--radius); overflow:hidden; box-shadow:var(--shadow-sm); }
+  .vs-table thead { background:var(--primary); }
+  .vs-table thead th { padding:1rem 1.25rem; font-family:'Syne',sans-serif; font-size:.8rem; font-weight:600; color:#fff; text-transform:uppercase; letter-spacing:.04em; text-align:left; }
+  .vs-table thead th:first-child { color:rgba(255,255,255,.6); }
+  .vs-table tbody tr { border-bottom:1px solid var(--border); }
+  .vs-table tbody tr:last-child { border-bottom:none; }
+  .vs-table tbody tr:hover { background:var(--bg-alt); }
+  .vs-table td { padding:.875rem 1.25rem; font-size:.875rem; color:var(--text-muted); vertical-align:middle; }
+  .vs-table td:first-child { font-weight:600; color:var(--text); }
+  .vs-bad  { color:#c03030; font-weight:600; }
+  .vs-good { color:#1a7a4a; font-weight:600; }
+
+  /* ── LOADING + RESULTS (simulator) ── */
+  .sim-loading { display:none; align-items:center; justify-content:center; gap:1rem; padding:2rem; color:var(--text-muted); font-size:.9rem; margin-top:1.5rem; }
+  .sim-spinner { width:26px; height:26px; border:3px solid var(--border); border-top-color:var(--green-dark); border-radius:50%; animation:spin .8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .growth-table-wrap { overflow-x:auto; margin-top:1.5rem; }
+  .growth-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+  .growth-table th { padding:.5rem .75rem; text-align:left; font-size:.7rem; font-weight:600; letter-spacing:.04em; text-transform:uppercase; color:var(--text-muted); border-bottom:2px solid var(--border); }
+  .growth-table td { padding:.6rem .75rem; border-bottom:1px solid var(--border); color:var(--text-muted); }
+  .growth-table td:first-child { color:var(--text); font-weight:500; }
+  .growth-table tbody tr:last-child td { border-bottom:none; font-weight:700; color:var(--primary); background:rgba(61,214,140,.06); }
+  .td-best { color:#1a7a4a; font-weight:600; }
+  .field-err { display:none; color:#d43a2f; font-size:.75rem; margin-top:.2rem; }
 
   /* ── BENEFITS ── */
   .benefits-section { background: var(--bg-alt); }
@@ -103,7 +160,7 @@
 
   @media(max-width:700px){
     .form-row { grid-template-columns: 1fr; }
-    .sim-grid { grid-template-columns: 1fr; }
+    .sim-grid { grid-template-columns: 1fr 1fr; }
     .benefits-row { grid-template-columns: 1fr; }
   }
 </style>
@@ -121,6 +178,27 @@
     <li><a href="#simulatore" class="nav-cta">Calcola ora →</a></li>
   </ul>
 </nav>
+
+<!-- SHOCK SECTION -->
+<div class="shock-section" style="padding-top:6rem">
+  <div class="shock-grid">
+    <div class="shock-card red">
+      <span class="shock-num">€1.240</span>
+      <h4>Se aspetti 1 anno perdi €1.240 di deduzioni fiscali</h4>
+      <p>Con reddito di €35.000 e versamento mensile di €100, l'aliquota marginale al 35% ti costa €1.240/anno di tasse in più che potresti evitare.</p>
+    </div>
+    <div class="shock-card amber">
+      <span class="shock-num">€847</span>
+      <h4>Ogni mese di ritardo = €847 in meno a 67 anni</h4>
+      <p>Per chi inizia a 30 anni, ogni mese perso di versamento a €100/mese equivale a €847 di capitale in meno al momento della pensione, grazie alla capitalizzazione composta al 4.2%.</p>
+    </div>
+    <div class="shock-card rust">
+      <span class="shock-num">50%</span>
+      <h4>Il tuo datore versa il TFR: stai perdendo il 50% del rendimento</h4>
+      <p>Il TFR lasciato in azienda rende circa l'1.5%/anno. Trasferito al fondo pensione, lo stesso capitale può rendere il 4.2%, quasi il triplo.</p>
+    </div>
+  </div>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -271,6 +349,68 @@
   </div>
 </section>
 
+<!-- TRANSFER SECTION -->
+<section style="background:var(--bg-alt)">
+  <div class="centered">
+    <span class="section-label">Trasferimento gratuito</span>
+    <h2 class="section-title">Hai già un piano pensione?<br>Trasferiscilo senza perdere nulla</h2>
+    <p class="section-sub">Puoi trasferire il tuo fondo pensione attuale a un fondo migliore dopo soli 2 anni di adesione, completamente gratis e senza perdere la posizione maturata.</p>
+  </div>
+  <div class="transfer-box reveal">
+    <div class="transfer-steps">
+      <div class="tr-step"><div class="tr-step-num">1</div><p><strong>Compila il form</strong><br>Ci dici dove hai il piano attuale e quanto hai accumulato</p></div>
+      <div class="tr-step"><div class="tr-step-num">2</div><p><strong>Analizziamo</strong><br>Confrontiamo rendimento, costi e condizioni col tuo piano attuale</p></div>
+      <div class="tr-step"><div class="tr-step-num">3</div><p><strong>Trasferiamo</strong><br>Se conviene, gestiamo tutto noi. Gratis, senza burocrazia</p></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem">
+      <div class="form-group">
+        <label style="font-size:.8rem;font-weight:600;color:var(--text);letter-spacing:.03em">Piano pensione attuale</label>
+        <select style="padding:.75rem 1rem;border-radius:12px;border:1px solid var(--border);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);outline:none;width:100%">
+          <option>Generali PIP</option><option>Allianz Previdenza</option><option>AXA MPS</option>
+          <option>UnipolSai Previdenza</option><option>Poste Vita Previdenza</option>
+          <option>Fondo pensione aziendale</option><option>Altro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label style="font-size:.8rem;font-weight:600;color:var(--text);letter-spacing:.03em">Capitale accumulato (€)</label>
+        <input type="number" placeholder="es. 12000" min="0" style="padding:.75rem 1rem;border-radius:12px;border:1px solid var(--border);background:var(--bg);font-family:'DM Sans',sans-serif;font-size:.95rem;color:var(--text);outline:none;width:100%">
+      </div>
+    </div>
+    <button class="btn-primary" style="width:100%;padding:1rem;font-size:1rem;border-radius:14px" onclick="this.textContent='Analisi in corso…';setTimeout(()=>this.textContent='Verifica se posso fare meglio →',2000)">Verifica se posso fare meglio →</button>
+    <p style="text-align:center;font-size:.75rem;color:var(--text-muted);margin-top:.75rem">🔒 Analisi gratuita · Nessun obbligo · Portabilità garantita per legge</p>
+  </div>
+</section>
+
+<!-- VS BANCARI TABLE -->
+<section style="background:var(--bg)">
+  <div class="centered">
+    <span class="section-label">Confronto diretto</span>
+    <h2 class="section-title">Il nostro fondo vs<br>i fondi bancari tipici</h2>
+    <p class="section-sub">I costi nascosti dei fondi pensione bancari erodono silenziosamente il tuo capitale. Ecco la differenza.</p>
+  </div>
+  <div class="vs-table-wrap reveal">
+    <table class="vs-table">
+      <thead>
+        <tr>
+          <th>Caratteristica</th>
+          <th>Banca tipica</th>
+          <th>RisparmioFacile</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Rendimento medio storico</td><td class="vs-bad">2.1% / anno</td><td class="vs-good">4.2% / anno</td></tr>
+        <tr><td>Costi di gestione</td><td class="vs-bad">2.8% / anno</td><td class="vs-good">0.9% / anno</td></tr>
+        <tr><td>Costo netto reale (rendimento – costi)</td><td class="vs-bad">−0.7% / anno</td><td class="vs-good">+3.3% / anno</td></tr>
+        <tr><td>Deducibilità IRPEF fino a €5.164</td><td class="vs-good">✓ Sì</td><td class="vs-good">✓ Sì</td></tr>
+        <tr><td>Portabilità dopo 2 anni</td><td class="vs-good">✓ Sì</td><td class="vs-good">✓ Sì</td></tr>
+        <tr><td>Consulenza dedicata inclusa</td><td class="vs-bad">✗ No</td><td class="vs-good">✓ Sì</td></tr>
+        <tr><td>Report annuale personalizzato</td><td class="vs-bad">✗ No</td><td class="vs-good">✓ Sì</td></tr>
+        <tr><td>Avviso proattivo se il fondo sottoperforma</td><td class="vs-bad">✗ No</td><td class="vs-good">✓ Sì</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 <!-- TAX BENEFITS -->
 <section style="background:var(--bg-alt)">
   <div class="centered">
@@ -310,27 +450,23 @@
       <div class="form-group">
         <label>La tua età</label>
         <input type="number" id="s-eta" placeholder="es. 35" min="18" max="65">
+        <span class="field-err" id="s-eta-err"></span>
       </div>
       <div class="form-group">
-        <label>Reddito annuo lordo</label>
-        <select id="s-reddito">
-          <option value="">Seleziona...</option>
-          <option value="15000">Fino a €15.000</option>
-          <option value="20000">€15.000 – €20.000</option>
-          <option value="28000">€20.000 – €28.000</option>
-          <option value="40000">€28.000 – €40.000</option>
-          <option value="55000">€40.000 – €55.000</option>
-          <option value="80000">Oltre €55.000</option>
-        </select>
+        <label>Reddito annuo lordo (€)</label>
+        <input type="number" id="s-reddito" placeholder="es. 32000" min="1000">
+        <span class="field-err" id="s-reddito-err"></span>
       </div>
       <div class="form-group">
         <label>Versamento mensile (€)</label>
         <input type="number" id="s-versamento" placeholder="es. 100" min="50" max="2000">
+        <span class="field-err" id="s-versamento-err"></span>
       </div>
     </div>
-    <button class="btn-primary form-submit" onclick="calcolaPensione()">
+    <button id="s-btn" class="btn-primary form-submit" onclick="calcolaPensione()">
       Calcola il mio piano →
     </button>
+    <div class="sim-loading" id="s-loading"><div class="sim-spinner"></div>Elaborazione piano previdenziale…</div>
 
     <div class="sim-result" id="sim-result">
       <div class="sim-result-title">📊 La tua proiezione previdenziale</div>
@@ -340,19 +476,35 @@
           <span class="sim-lbl">Capitale accumulato<br>stimato a 67 anni</span>
         </div>
         <div class="sim-item">
-          <span class="sim-num" id="r-anni">—</span>
-          <span class="sim-lbl">Anni di versamento<br>al tuo piano</span>
+          <span class="sim-num" id="r-rendita">—</span>
+          <span class="sim-lbl">Rendita mensile stimata<br>(su 20 anni di erogazione)</span>
         </div>
         <div class="sim-item">
           <span class="sim-num" id="r-fiscale">—</span>
-          <span class="sim-lbl">Risparmio fiscale IRPEF<br>stimato ogni anno</span>
+          <span class="sim-lbl">Risparmio fiscale IRPEF<br>ogni anno</span>
         </div>
         <div class="sim-item">
           <span class="sim-num" id="r-totFiscale">—</span>
           <span class="sim-lbl">Risparmio fiscale totale<br>stimato nel periodo</span>
         </div>
+        <div class="sim-item">
+          <span class="sim-num" id="r-anni">—</span>
+          <span class="sim-lbl">Anni al piano</span>
+        </div>
+        <div class="sim-item">
+          <span class="sim-num" id="r-aliquota">—</span>
+          <span class="sim-lbl">Aliquota marginale<br>IRPEF applicata</span>
+        </div>
       </div>
-      <p class="sim-disclaimer">* Simulazione indicativa basata su rendimento costante 4.2%/anno. I rendimenti effettivi dipendono dall'andamento dei mercati. Il risparmio fiscale è calcolato sull'aliquota marginale IRPEF del tuo scaglione di reddito.</p>
+
+      <div class="growth-table-wrap">
+        <table class="growth-table">
+          <thead><tr><th>Orizzonte</th><th>Versato</th><th>Rendimento accumulato</th><th>Capitale totale</th></tr></thead>
+          <tbody id="r-growth-rows"></tbody>
+        </table>
+      </div>
+
+      <p class="sim-disclaimer" style="margin-top:1rem">* Simulazione indicativa basata su rendimento costante 4.2%/anno. I rendimenti effettivi dipendono dall'andamento dei mercati. La rendita mensile è calcolata su un orizzonte di erogazione di 20 anni senza rivalutazione.</p>
     </div>
   </div>
 </section>
@@ -453,43 +605,69 @@ function animateCounter(el){const target=parseFloat(el.dataset.target),prefix=el
 const co=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounter(e.target);co.unobserve(e.target);}});},{threshold:.5});
 document.querySelectorAll('.hstat-num[data-target]').forEach(el=>co.observe(el));
 
+/* helpers */
+function showFe(id,msg){const el=document.getElementById(id);if(el){el.textContent=msg;el.style.display='block';}}
+function hideFe(id){const el=document.getElementById(id);if(el){el.textContent='';el.style.display='none';}}
+
+/* pre-fill from URL params */
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('eta'))        document.getElementById('s-eta').value=p.get('eta');
+  if(p.get('versamento')) document.getElementById('s-versamento').value=p.get('versamento');
+})();
+
 /* ── PENSION SIMULATOR ── */
 function calcolaPensione() {
   const eta = parseInt(document.getElementById('s-eta').value);
-  const redditoVal = document.getElementById('s-reddito').value;
+  const reddito = parseInt(document.getElementById('s-reddito').value);
   const versamento = parseInt(document.getElementById('s-versamento').value);
+  let valid = true;
 
-  if (!eta || !redditoVal || !versamento || eta < 18 || eta >= 67 || versamento < 1) {
-    alert('Inserisci tutti i dati richiesti (età tra 18 e 66, versamento positivo).');
-    return;
-  }
+  if(!eta||eta<18||eta>=67){showFe('s-eta-err','Inserisci un\'età tra 18 e 66 anni');valid=false;}else hideFe('s-eta-err');
+  if(!reddito||reddito<1000){showFe('s-reddito-err','Inserisci il tuo reddito annuo lordo');valid=false;}else hideFe('s-reddito-err');
+  if(!versamento||versamento<50){showFe('s-versamento-err','Versamento minimo €50/mese');valid=false;}else hideFe('s-versamento-err');
+  if(!valid) return;
 
-  const reddito = parseInt(redditoVal);
-  const anniRimasti = 67 - eta;
-  const r = 0.042 / 12; // tasso mensile
-  const n = anniRimasti * 12;
-  const capitale = versamento * ((Math.pow(1 + r, n) - 1) / r);
+  const btn=document.getElementById('s-btn'),loadEl=document.getElementById('s-loading'),resEl=document.getElementById('sim-result');
+  btn.disabled=true;btn.textContent='Calcolo in corso…';loadEl.style.display='flex';resEl.classList.remove('show');
 
-  // aliquota marginale IRPEF italiana 2024
-  let aliquota;
-  if (reddito <= 15000)      aliquota = 0.23;
-  else if (reddito <= 28000) aliquota = 0.25;
-  else if (reddito <= 50000) aliquota = 0.35;
-  else                       aliquota = 0.43;
+  setTimeout(()=>{
+    const anniRimasti=67-eta, r=0.042/12, n=anniRimasti*12;
+    const capitale=Math.round(versamento*((Math.pow(1+r,n)-1)/r));
+    const rendita=Math.round(capitale/240);
 
-  const versamentoAnnuo = Math.min(versamento * 12, 5164);
-  const risparmioFiscaleAnno = Math.round(versamentoAnnuo * aliquota);
-  const risparmioFiscaleTot  = risparmioFiscaleAnno * anniRimasti;
+    let aliquota;
+    if(reddito<=28000)      aliquota=0.23;
+    else if(reddito<=50000) aliquota=0.35;
+    else                    aliquota=0.43;
 
-  document.getElementById('r-capitale').textContent   = '€' + Math.round(capitale).toLocaleString('it-IT');
-  document.getElementById('r-anni').textContent        = anniRimasti + ' anni';
-  document.getElementById('r-fiscale').textContent     = '€' + risparmioFiscaleAnno.toLocaleString('it-IT') + '/anno';
-  document.getElementById('r-totFiscale').textContent  = '€' + risparmioFiscaleTot.toLocaleString('it-IT');
+    const versamentoAnnuo=Math.min(versamento*12,5164);
+    const risparmioAnno=Math.round(versamentoAnnuo*aliquota);
+    const risparmioTot=risparmioAnno*anniRimasti;
 
-  const res = document.getElementById('sim-result');
-  res.classList.add('show');
-  res.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    document.getElementById('r-capitale').textContent   ='€'+capitale.toLocaleString('it-IT');
+    document.getElementById('r-rendita').textContent    ='€'+rendita.toLocaleString('it-IT')+'/mese';
+    document.getElementById('r-fiscale').textContent    ='€'+risparmioAnno.toLocaleString('it-IT')+'/anno';
+    document.getElementById('r-totFiscale').textContent ='€'+risparmioTot.toLocaleString('it-IT');
+    document.getElementById('r-anni').textContent       =anniRimasti+' anni';
+    document.getElementById('r-aliquota').textContent   =Math.round(aliquota*100)+'% IRPEF';
+
+    /* growth table */
+    let rows='';
+    for(let y=5;y<=anniRimasti;y+=5){
+      const nY=y*12,capY=Math.round(versamento*((Math.pow(1+r,nY)-1)/r));
+      const versato=versamento*12*y, rend=capY-versato;
+      const isLast=(y+5>anniRimasti);
+      rows+=`<tr><td>${y} anni (età ${eta+y})</td><td>€${versato.toLocaleString('it-IT')}</td><td>+€${rend.toLocaleString('it-IT')}</td><td class="td-best">€${capY.toLocaleString('it-IT')}</td></tr>`;
+    }
+    document.getElementById('r-growth-rows').innerHTML=rows;
+
+    btn.disabled=false;btn.textContent='Calcola il mio piano →';
+    loadEl.style.display='none';resEl.classList.add('show');
+    resEl.scrollIntoView({behavior:'smooth',block:'nearest'});
+  },1500);
 }
 </script>
+<script src="components.js"></script>
 </body>
 </html>

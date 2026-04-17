@@ -8,6 +8,80 @@
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 <style>
+  /* ── HERO SELECTOR ── */
+  .hero-selector { margin-top: 2.5rem; width: 100%; max-width: 680px; }
+  .hs-btns { display: grid; grid-template-columns: repeat(4,1fr); gap: .75rem; }
+  .hs-btn {
+    background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.18);
+    border-radius: var(--radius); padding: 1.1rem .5rem; cursor: pointer;
+    font-family: 'Syne', sans-serif; font-size: .82rem; font-weight: 600;
+    color: rgba(255,255,255,.85); display: flex; flex-direction: column;
+    align-items: center; gap: .4rem; transition: all .2s;
+    backdrop-filter: blur(8px);
+  }
+  .hs-btn:hover, .hs-btn.active {
+    background: rgba(61,214,140,.18); border-color: var(--green);
+    color: #fff; transform: translateY(-2px);
+  }
+  .hs-btn-icon { font-size: 1.5rem; }
+  .hs-form {
+    display: none; background: rgba(255,255,255,.07); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.15); border-radius: var(--radius);
+    padding: 1.5rem; margin-top: .75rem;
+    animation: fadeUp .25s ease-out;
+  }
+  .hs-form.show { display: block; }
+  .hs-form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .75rem; }
+  .hs-form-row.single { grid-template-columns: 1fr; }
+  .hs-form input, .hs-form select {
+    padding: .7rem .9rem; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.2); background: rgba(255,255,255,.1);
+    font-family: 'DM Sans', sans-serif; font-size: .9rem; color: #fff;
+    outline: none; width: 100%;
+    transition: border-color .2s, background .2s;
+  }
+  .hs-form input::placeholder { color: rgba(255,255,255,.5); }
+  .hs-form input:focus, .hs-form select:focus {
+    border-color: var(--green); background: rgba(255,255,255,.15);
+  }
+  .hs-form select option { color: var(--text); background: #fff; }
+  .hs-form-btn {
+    width: 100%; padding: .9rem; border-radius: 12px;
+    background: var(--green-dark); color: #fff; border: none;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .95rem;
+    cursor: pointer; transition: background .2s, transform .15s;
+  }
+  .hs-form-btn:hover { background: #22a065; transform: translateY(-1px); }
+
+  /* ── URGENCY SECTION ── */
+  .urgency-bar {
+    background: var(--primary); padding: 3rem 5vw; text-align: center;
+  }
+  .urgency-inner { max-width: 820px; margin: 0 auto; }
+  .urgency-tag {
+    display: inline-block; background: rgba(61,214,140,.2); color: var(--green);
+    font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    padding: .3rem .85rem; border-radius: 50px; border: 1px solid rgba(61,214,140,.3);
+    margin-bottom: 1.25rem;
+  }
+  .urgency-title {
+    font-family: 'Syne', sans-serif; font-size: clamp(1.3rem, 3vw, 1.9rem);
+    font-weight: 700; color: #fff; line-height: 1.35; margin-bottom: .75rem;
+  }
+  .urgency-title .urg-accent { color: var(--green); }
+  .urgency-counter-wrap { display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 1.5rem 0; flex-wrap: wrap; }
+  .urg-stat { text-align: center; }
+  .urg-num {
+    font-family: 'Syne', sans-serif; font-size: clamp(2rem,4vw,2.8rem);
+    font-weight: 700; color: var(--green); display: block; line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .urg-lbl { font-size: .8rem; color: rgba(255,255,255,.6); margin-top: .3rem; display: block; }
+  .urg-sep { width: 1px; height: 50px; background: rgba(255,255,255,.15); }
+  .urgency-sub { color: rgba(255,255,255,.65); font-size: .875rem; margin-bottom: 1.5rem; line-height: 1.6; }
+  .urgency-cta { display: inline-block; background: var(--green-dark); color: #fff; padding: .9rem 2.2rem; border-radius: 14px; font-family: 'Syne', sans-serif; font-weight: 700; font-size: .95rem; text-decoration: none; transition: background .2s, transform .15s; }
+  .urgency-cta:hover { background: #22a065; transform: translateY(-2px); }
+
   /* ── SERVICES ── */
   #servizi { background: var(--bg); }
   .services-grid {
@@ -186,9 +260,51 @@
 
   <p class="hero-sub">Confrontiamo in secondi le offerte di tutte le principali compagnie italiane. Risparmi fino al 35% senza muoverti da casa.</p>
 
-  <div class="hero-actions">
-    <a href="#offerte" class="btn-primary">Confronta gratis →</a>
-    <a href="#come-funziona" class="btn-secondary">Come funziona</a>
+  <!-- HERO SELECTOR -->
+  <div class="hero-selector">
+    <div class="hs-btns">
+      <button class="hs-btn" onclick="selectCategory('auto',this)"><span class="hs-btn-icon">🚗</span>Auto/Moto</button>
+      <button class="hs-btn" onclick="selectCategory('casa',this)"><span class="hs-btn-icon">🏠</span>Casa</button>
+      <button class="hs-btn" onclick="selectCategory('pensione',this)"><span class="hs-btn-icon">📈</span>Pensione</button>
+      <button class="hs-btn" onclick="selectCategory('salute',this)"><span class="hs-btn-icon">🏥</span>Salute</button>
+    </div>
+
+    <div id="hs-auto" class="hs-form">
+      <div class="hs-form-row">
+        <input type="text" id="hs-targa" placeholder="Targa (es. AB123CD)" maxlength="7" style="text-transform:uppercase">
+        <input type="text" id="hs-cap-auto" placeholder="CAP di residenza" maxlength="5">
+      </div>
+      <button class="hs-form-btn" onclick="goToAuto()">Calcola risparmio gratis →</button>
+    </div>
+
+    <div id="hs-casa" class="hs-form">
+      <div class="hs-form-row">
+        <input type="text" id="hs-cap-casa" placeholder="CAP dell'abitazione" maxlength="5">
+        <input type="number" id="hs-mq" placeholder="Superficie (mq)" min="20" max="500">
+      </div>
+      <button class="hs-form-btn" onclick="goToCasa()">Calcola risparmio gratis →</button>
+    </div>
+
+    <div id="hs-pensione" class="hs-form">
+      <div class="hs-form-row">
+        <input type="number" id="hs-eta" placeholder="La tua età" min="18" max="65">
+        <input type="number" id="hs-versamento" placeholder="Versamento mensile (€)" min="50">
+      </div>
+      <button class="hs-form-btn" onclick="goToPensione()">Calcola il mio piano →</button>
+    </div>
+
+    <div id="hs-salute" class="hs-form">
+      <div class="hs-form-row">
+        <input type="number" id="hs-eta-salute" placeholder="La tua età" min="18" max="80">
+        <select id="hs-nucleo">
+          <option value="">Nucleo familiare</option>
+          <option value="solo">Solo</option>
+          <option value="coppia">Coppia</option>
+          <option value="famiglia">Famiglia con figli</option>
+        </select>
+      </div>
+      <button class="hs-form-btn" onclick="goToSalute()">Calcola risparmio gratis →</button>
+    </div>
   </div>
 
   <div class="hero-stats">
@@ -210,6 +326,32 @@
     </div>
   </div>
 </section>
+
+<!-- URGENCY PENSIONE -->
+<div class="urgency-bar">
+  <div class="urgency-inner">
+    <span class="urgency-tag">⏰ Il costo dell'attesa</span>
+    <h2 class="urgency-title">Ogni anno che aspetti ti costa <span class="urg-accent" id="urg-capitale">€0</span> in mancato capitale<br>e <span class="urg-accent" id="urg-fiscale">€0</span> in vantaggi fiscali persi</h2>
+    <div class="urgency-counter-wrap">
+      <div class="urg-stat">
+        <span class="urg-num" id="urg-live-euro">€0,00</span>
+        <span class="urg-lbl">Vantaggi fiscali persi<br>da quando hai aperto questa pagina</span>
+      </div>
+      <div class="urg-sep"></div>
+      <div class="urg-stat">
+        <span class="urg-num">€458</span>
+        <span class="urg-lbl">Vantaggi fiscali persi<br>ogni anno senza un piano pensione</span>
+      </div>
+      <div class="urg-sep"></div>
+      <div class="urg-stat">
+        <span class="urg-num">€1.240</span>
+        <span class="urg-lbl">Deduzioni perse<br>ogni anno al 35% IRPEF</span>
+      </div>
+    </div>
+    <p class="urgency-sub">Calcolato su versamento mensile di €100 · Aliquota media IRPEF 35% · Rendimento 4.2%/anno</p>
+    <a href="piano-pensione.html" class="urgency-cta">Calcola il mio piano ora →</a>
+  </div>
+</div>
 
 <!-- TRUST BAR -->
 <div class="trust-bar">
@@ -464,6 +606,52 @@
 <a class="floating-badge" href="#offerte">🔍 Confronta ora</a>
 
 <script>
+/* ── HERO SELECTOR ── */
+function selectCategory(cat, btn) {
+  document.querySelectorAll('.hs-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.hs-form').forEach(f=>f.classList.remove('show'));
+  btn.classList.add('active');
+  document.getElementById('hs-'+cat).classList.add('show');
+}
+function goToAuto() {
+  const t=document.getElementById('hs-targa').value.trim().toUpperCase();
+  const c=document.getElementById('hs-cap-auto').value.trim();
+  if(!t||!c){alert('Inserisci targa e CAP per continuare.');return;}
+  location.href='polizza-auto.html?targa='+encodeURIComponent(t)+'&cap='+encodeURIComponent(c)+'#preventivo';
+}
+function goToCasa() {
+  const c=document.getElementById('hs-cap-casa').value.trim();
+  const m=document.getElementById('hs-mq').value;
+  if(!c||!m){alert('Inserisci CAP e superficie per continuare.');return;}
+  location.href='polizza-casa.html?cap='+encodeURIComponent(c)+'&mq='+encodeURIComponent(m)+'#preventivo';
+}
+function goToPensione() {
+  const e=document.getElementById('hs-eta').value;
+  const v=document.getElementById('hs-versamento').value;
+  if(!e||!v){alert('Inserisci età e versamento mensile per continuare.');return;}
+  location.href='piano-pensione.html?eta='+encodeURIComponent(e)+'&versamento='+encodeURIComponent(v)+'#simulatore';
+}
+function goToSalute() {
+  alert('Il servizio Salute sarà disponibile a breve. Nel frattempo confronta auto, casa e pensione!');
+}
+
+/* ── URGENCY COUNTER ── */
+(function(){
+  const startTime=Date.now();
+  const ratePerMs=458/(365*24*60*60*1000); // €458/anno in ms
+  const capitaleLost=1240; const fiscaleLost=458;
+  document.getElementById('urg-capitale').textContent='€'+capitaleLost.toLocaleString('it-IT');
+  document.getElementById('urg-fiscale').textContent='€'+fiscaleLost.toLocaleString('it-IT');
+  function tick(){
+    const elapsed=Date.now()-startTime;
+    const lost=elapsed*ratePerMs;
+    document.getElementById('urg-live-euro').textContent='€'+lost.toFixed(4).replace('.',',');
+    requestAnimationFrame(tick);
+  }
+  tick();
+})();
+
+
 const offers = {
   auto: [
     { logo:'Generali', name:'Motor Protetto Plus', price:'€389', period:'/anno', saving:'Risparmi €261 vs media', features:['RC Auto + Furto & Incendio','Assistenza stradale 24/7','Tutela legale inclusa'], featured:true },
@@ -522,6 +710,13 @@ function animateCounter(el) {
 }
 const co = new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){animateCounter(e.target);co.unobserve(e.target);}});},{threshold:.5});
 document.querySelectorAll('.hstat-num[data-target]').forEach(el=>co.observe(el));
+
+/* Pre-fill hero form from URL params if arriving from a back-link */
+(function(){
+  const p=new URLSearchParams(location.search);
+  if(p.get('cat')) selectCategory(p.get('cat'), document.querySelector('.hs-btn'));
+})();
 </script>
+<script src="components.js"></script>
 </body>
 </html>
